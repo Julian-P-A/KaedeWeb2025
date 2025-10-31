@@ -4,17 +4,74 @@
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
+		<title>Kaede Project - Vendemos Soluciones</title>
+		<meta name="description" content="Kaede Project - Vendemos Soluciones" />
+		<meta name="keywords" content="Kaede, Kaede Project, Desarrollo Web,
+		Desarrollo de Software, Soluciones Tecnológicas" />
+		<meta name="author" content="Kaede Project" />
+		<meta name="robots" content="index, follow" />
+		<meta name="googlebot" content="index, follow" />
+		<meta name="bingbot" content="index, follow" />
+		<meta name="yandexbot" content="index, follow" />
 	</head>
 	<body>
+
 		<slot />
 	</body>
 </html>
 
+<style is:global>
+	@import "tailwindcss";
+	@plugin "@midudev/tailwind-animations";
+
+	@font-face {
+		font-family: "Inter";
+		src: url("/fonts/Inter_18pt-Regular.ttf") format("ttf");
+		font-weight: normal;	
+		font-style: normal;
+		font-display: swap;
+	}
+
+	@font-face {
+		font-family: "Inter";
+		src: url("/fonts/Inter_18pt-Regular.ttf") format("ttf");
+		font-weight: normal;	
+		font-style: normal;
+		font-display: swap;
+	}
+
+
+	@font-face {
+		font-family: "Inter";
+		src: url("/fonts/Inter_18pt-Medium.ttf") format("ttf");
+		font-weight: medium;	
+		font-style: normal;
+		font-display: swap;
+	}
+
+	@font-face {
+		font-family: "Inter";
+		src: url("/fonts/Inter_18pt-SemiBold.ttf") format("ttf");
+		font-weight: semi-bold;	
+		font-style: normal;
+		font-display: swap;
+	}
+
+	h1, h2{
+		font-family: "Inter", sans-serif;
+		font-weight: normal;
+	}
+
+	h3, h4, h5, h6, p, a, span, div, button{
+		font-family: "Inter", sans-serif;
+		font-weight: medium;
+	}
+</style>
+
 <style>
 	html,
 	body {
+		background-color: white;
 		margin: 0;
 		width: 100%;
 		height: 100%;

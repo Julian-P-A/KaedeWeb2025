@@ -1,0 +1,47 @@
+<header
+  id="mainHeader"
+  class="animate-fade-in-up fixed top-7 left-0 w-full z-50 flex items-center text-white transition-all duration-600 px-5"
+>
+  <!-- Contenedor interno (para padding horizontal) -->
+  <div class="flex w-full items-center justify-between px-10 py-3">
+
+    <!-- Izquierda -->
+    <div class="flex items-center justify-start w-[150px] hover:scale-102 transition-transform duration-600">
+      <img src="/Logo.svg" alt="Kaede Project Logo" class="max-h-6" />
+    </div>
+
+    <!-- Centro (crece) -->
+    <div class="flex-1 flex justify-center text-[14px] tracking-tight">
+      <nav class="flex justify-center space-x-8">
+        <a href="#" class="hover:text-gray-400 transition duration-500 ease-in-out">HOME</a>
+        <a href="#" class="hover:text-gray-400 transition duration-500 ease-in-out">PROJECTS</a>
+        <a href="#" class="hover:text-gray-400 transition duration-500 ease-in-out">ABOUT</a>
+        <a href="#" class="hover:text-gray-400 transition duration-500 ease-in-out">SERVICES</a>
+      </nav>
+    </div>
+
+    <!-- Derecha (mismo ancho que izquierda) -->
+    <div class="flex items-center justify-end w-[150px]">
+      <button
+        class="bg-[#303030] mix-blend-screen hover:bg-white hover:text-black transition duration-700 px-5 py-[5px] rounded-lg text-[14px] tracking-tight "
+      >
+        Contact
+      </button>
+    </div>
+
+  </div>
+</header>
+
+<script>
+  const header = document.getElementById("mainHeader");
+
+  window.addEventListener("scroll", () => {
+    if (window.scrollY > 10) {
+      header.classList.remove("top-7");
+      header.classList.add("top-0");
+    } else {
+      header.classList.add("top-7");
+      header.classList.remove("top-0");
+    }
+  });
+</script>
