@@ -23,7 +23,7 @@
     <!-- Derecha (mismo ancho que izquierda) -->
     <div class="flex items-center justify-end w-[150px]">
       <button
-        class="bg-[#303030] mix-blend-screen hover:bg-white hover:text-black transition duration-700 px-5 py-[5px] rounded-lg text-[14px] tracking-tight "
+        class="cta transition duration-700 px-5 py-[5px] rounded-lg text-[14px] mix-blend-screen tracking-tight "
       >
         Contact
       </button>
@@ -31,6 +31,19 @@
 
   </div>
 </header>
+
+<style>
+  .cta {
+    background: rgba(48,48,48,0.55);
+    color: white;
+    border: none;
+  }
+
+  .cta:hover {
+    background: rgba(255,255,255,0.95);
+    color: black;
+  }
+</style>
 
 <script>
   const header = document.getElementById("mainHeader");

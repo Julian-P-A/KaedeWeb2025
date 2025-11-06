@@ -1,19 +1,171 @@
+---
+interface Banner {
+  title: string;
+  subtitle: string;
+  image: string;
+}
+
+const banners: Banner[] = [
+  { title: "Baterías Star Redesign", subtitle: "Web Design", image: "/Hero-2.webp" },
+  { title: "Kaede Branding Concept", subtitle: "Visual Identity", image: "/Hero.webp" },
+  { title: "UI / UX Exploration", subtitle: "Design Systems", image: "/Hero-2.webp" },
+];
+---
+
 <main
-  class="hero-section relative top-[20px] w-[calc(100%-40px)] px-10 py-20 mx-auto flex flex-col items-left justify-end min-h-[95vh] text-white rounded-lg"
+  class="hero-section relative top-[20px] w-[calc(100%-40px)] mx-auto min-h-[95vh] text-white rounded-lg overflow-hidden"
 >
- <p class="text-white/80 max-w-lg text-left px-[2px] tracking-tight">Web Design</p>
-  <h1 class="text-4xl mb-4 tracking-tight">Baterias Star Redesign</h1>
-  <div class="flex items-center justify-start w-[150px]">
-      <button
-        class="bg-[#303030] mix-blend-screen hover:bg-white hover:text-black transition duration-700 px-5 py-[5px] rounded-lg text-[14px] tracking-tight "
-      >
-        View more about
-      </button>
-    </div>
+  {banners.map((banner, index) => (
+    <section
+      class={`hero-slide absolute inset-0 transition-opacity duration-[1200ms] ease-in-out ${
+        index === 0 ? "opacity-100" : "opacity-0"
+      } flex flex-col items-left justify-end px-10 py-20`}
+      data-index={index}
+    >
+      <!-- Fondo con imagen -->
+      <div class="hero-bg absolute inset-0 flex items-center justify-center">
+        <img
+          src={banner.image}
+          alt={banner.title}
+          class={`hero-bg-img transition-transform duration-[2000ms] ease-out ${
+            index === 0 ? "opacity-100 scale-100" : "opacity-0 scale-110"
+          }`}
+          loading={index === 0 ? "eager" : "lazy"}
+        />
+      </div>
+
+      <!-- Contenido de texto -->
+      <div class="text-hero relative z-10 opacity-0 transition-none">
+        <p class="text-white/80 max-w-lg text-left px-[2px] tracking-tight">
+          {banner.subtitle}
+        </p>
+        <h1 class="text-4xl mb-4 tracking-tight">{banner.title}</h1>
+
+        <button
+          class="hero-cta transition duration-700 px-5 py-[5px] rounded-lg text-[14px] tracking-tight"
+        >
+          View more about
+        </button>
+      </div>
+    </section>
+  ))}
 </main>
 
 <style>
+  /* ==== HERO BASE ==== */
   .hero-section {
-    background: url('/Hero.webp') no-repeat center center;
-    background-size: cover;
+    position: relative;
+    background-color: black;
+    overflow: hidden;
+    border-radius: 0.75rem;
   }
+
+  .hero-slide {
+    background: transparent;
+    border-radius: 0.5rem;
+    pointer-events: none;
+  }
+
+  .hero-slide.opacity-100 {
+    pointer-events: auto;
+  }
+
+  /* ==== FONDO ==== */
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    z-index: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .hero-bg-img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain; /* clave: muestra toda la imagen, sin recortarla */
+    transform-origin: center;
+    will-change: transform, opacity;
+  }
+
+  /* ==== ANIMACIÓN SOLO DE ENTRADA ==== */
+  @keyframes fadeInUp {
+    0% { opacity: 0; transform: translateY(20px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+
+  .text-active {
+    animation: fadeInUp 1.2s ease-out forwards;
+  }
+
+  .hero-cta {
+    background: rgba(48,48,48,0.55);
+    color: white;
+    border: none;
+  }
+
+  .hero-cta:hover {
+    background: rgba(255,255,255,0.95);
+    color: black;
+  }
+</style>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const slides = Array.from(document.querySelectorAll(".hero-slide"));
+    let current = 0;
+
+    function showNext() {
+      const prev = slides[current];
+      const nextIndex = (current + 1) % slides.length;
+      const next = slides[nextIndex];
+
+      const prevImg = prev.querySelector(".hero-bg-img");
+      const nextImg = next.querySelector(".hero-bg-img");
+
+      const prevText = prev.querySelector(".text-hero");
+      const nextText = next.querySelector(".text-hero");
+
+      // Ocultar inmediatamente el texto anterior
+      if (prevText) {
+        prevText.style.opacity = "0";
+        prevText.classList.remove("text-active");
+      }
+
+      // Transición de imagen suave
+      prev.classList.remove("opacity-100");
+      prev.classList.add("opacity-0");
+      prevImg.classList.remove("scale-100", "opacity-100");
+      prevImg.classList.add("scale-110", "opacity-0");
+
+      // Mostrar siguiente
+      next.classList.remove("opacity-0");
+      next.classList.add("opacity-100");
+      nextImg.classList.remove("scale-110", "opacity-0");
+      nextImg.classList.add("scale-100", "opacity-100");
+
+      // Texto siguiente con animación de entrada
+      if (nextText) {
+        nextText.style.opacity = "1";
+        nextText.classList.remove("text-active");
+        void nextText.offsetWidth; // reinicia animación
+        nextText.classList.add("text-active");
+      }
+
+      current = nextIndex;
+    }
+
+    // inicial
+    const firstSlide = slides[current];
+    firstSlide.querySelector(".hero-bg-img")?.classList.add("scale-100", "opacity-100");
+    const firstText = firstSlide.querySelector(".text-hero");
+    if (firstText) {
+      firstText.style.opacity = "1";
+      firstText.classList.add("text-active");
+    }
+
+    // cambio automático
+    setInterval(showNext, 6000);
+  });
+</script>
