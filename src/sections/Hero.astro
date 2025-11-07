@@ -13,13 +13,14 @@ const banners: Banner[] = [
 ---
 
 <main
+  id="hero"
   class="hero-section relative top-[20px] w-[calc(100%-40px)] mx-auto min-h-[95vh] text-white rounded-lg overflow-hidden"
 >
   {banners.map((banner, index) => (
     <section
-      class={`hero-slide absolute inset-0 transition-opacity duration-[1200ms] ease-in-out ${
+      class={`hero-slide absolute inset-0 flex flex-col justify-end px-10 py-20 transition-opacity duration-[1200ms] ease-in-out ${
         index === 0 ? "opacity-100" : "opacity-0"
-      } flex flex-col items-left justify-end px-10 py-20`}
+      }`}
       data-index={index}
     >
       <!-- Fondo con imagen -->
@@ -34,15 +35,12 @@ const banners: Banner[] = [
         />
       </div>
 
-      <!-- Contenido de texto -->
+      <!-- Contenido -->
       <div class="text-hero relative z-10 opacity-0 transition-none">
-        <p class="text-white/80 max-w-lg text-left px-[2px] tracking-tight">
-          {banner.subtitle}
-        </p>
+        <p class="text-white/80 max-w-lg text-left tracking-tight">{banner.subtitle}</p>
         <h1 class="text-4xl mb-4 tracking-tight">{banner.title}</h1>
-
         <button
-          class="hero-cta transition duration-700 px-5 py-[5px] rounded-lg text-[14px] tracking-tight"
+          class="hero-cta transition duration-700 px-5 py-[5px] rounded-lg text-[13px] tracking-tight"
         >
           View more about
         </button>
@@ -52,12 +50,17 @@ const banners: Banner[] = [
 </main>
 
 <style>
-  /* ==== HERO BASE ==== */
+  /* ==== BASE ==== */
   .hero-section {
     position: relative;
     background-color: black;
     overflow: hidden;
     border-radius: 0.75rem;
+    top: 20px;
+    width: calc(100% - 40px);
+    min-height: 95vh;
+    margin-left: auto;
+    margin-right: auto;
   }
 
   .hero-slide {
@@ -81,14 +84,14 @@ const banners: Banner[] = [
   .hero-bg-img {
     width: 100%;
     height: 100%;
-    object-fit: cover;          /* Llenar completamente el contenedor */
-    object-position: center;    /* Centrar la imagen */
+    object-fit: cover;
+    object-position: center;
     transform-origin: center;
-    display: block;             /* Evita espacio fantasma debajo */
+    display: block;
     will-change: transform, opacity;
   }
 
-  /* ==== ANIMACIÓN SOLO DE ENTRADA ==== */
+  /* ==== ANIMACIÓN TEXTO ==== */
   @keyframes fadeInUp {
     0% { opacity: 0; transform: translateY(20px); }
     100% { opacity: 1; transform: translateY(0); }
@@ -98,14 +101,15 @@ const banners: Banner[] = [
     animation: fadeInUp 1.2s ease-out forwards;
   }
 
+  /* ==== BOTÓN ==== */
   .hero-cta {
-    background: rgba(77, 77, 77, 0.60);
+    background: rgba(77, 77, 77, 0.6);
     color: white;
     border: none;
   }
 
   .hero-cta:hover {
-    background: rgba(255,255,255,0.95);
+    background: rgba(255, 255, 255, 0.95);
     color: black;
   }
 </style>
@@ -113,8 +117,10 @@ const banners: Banner[] = [
 <script>
   document.addEventListener("DOMContentLoaded", () => {
     const slides = Array.from(document.querySelectorAll(".hero-slide"));
+    const hero = document.getElementById("hero");
     let current = 0;
 
+    // ======== Slider ========
     function showNext() {
       const prev = slides[current];
       const nextIndex = (current + 1) % slides.length;
@@ -122,7 +128,6 @@ const banners: Banner[] = [
 
       const prevImg = prev.querySelector(".hero-bg-img");
       const nextImg = next.querySelector(".hero-bg-img");
-
       const prevText = prev.querySelector(".text-hero");
       const nextText = next.querySelector(".text-hero");
 
@@ -131,26 +136,22 @@ const banners: Banner[] = [
         prevText.classList.remove("text-active");
       }
 
-      prev.classList.remove("opacity-100");
-      prev.classList.add("opacity-0");
-      prevImg.classList.remove("scale-100", "opacity-100");
+      prev.classList.replace("opacity-100", "opacity-0");
       prevImg.classList.add("scale-110", "opacity-0");
 
-      next.classList.remove("opacity-0");
-      next.classList.add("opacity-100");
+      next.classList.replace("opacity-0", "opacity-100");
       nextImg.classList.remove("scale-110", "opacity-0");
-      nextImg.classList.add("scale-100", "opacity-100");
 
       if (nextText) {
         nextText.style.opacity = "1";
-        nextText.classList.remove("text-active");
-        void nextText.offsetWidth; // reinicia animación
+        void nextText.offsetWidth;
         nextText.classList.add("text-active");
       }
 
       current = nextIndex;
     }
 
+    // Estado inicial
     const firstSlide = slides[current];
     firstSlide.querySelector(".hero-bg-img")?.classList.add("scale-100", "opacity-100");
     const firstText = firstSlide.querySelector(".text-hero");
@@ -159,6 +160,33 @@ const banners: Banner[] = [
       firstText.classList.add("text-active");
     }
 
+    // Rotación automática
     setInterval(showNext, 6000);
+
+    // ======== Efecto scroll proporcional ========
+    let lastProgress = 0; // para interpolar suavemente
+    window.addEventListener("scroll", () => {
+      const scrollY = window.scrollY;
+      const start = 300; // el scroll donde comienza el efecto
+      const end = 600; // el scroll donde termina el efecto
+      const rawProgress = Math.min(Math.max((scrollY - start) / (end - start), 0), 1);
+
+      // Suaviza con un easing (ease-out)
+      const progress = 1 - Math.pow(1 - rawProgress, 3);
+
+      // Interpolación
+      const smoothProgress = lastProgress + (progress - lastProgress) * 0.2;
+      lastProgress = smoothProgress;
+
+      const top = 20 * (1 - smoothProgress);
+      const minHeight = 95 + 5 * smoothProgress;
+      const borderRadius = 0.75 * (1 - smoothProgress);
+
+      hero.style.top = `${top}px`;
+      hero.style.width = `calc(100% - ${40 * (1 - smoothProgress)}px)`;
+      hero.style.minHeight = `${minHeight}vh`;
+      hero.style.borderRadius = `${borderRadius}rem`;
+    });
   });
 </script>
+

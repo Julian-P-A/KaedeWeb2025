@@ -1,70 +1,66 @@
 <header
   id="mainHeader"
-  class="animate-fade-in-up fixed top-7 left-0 w-full z-50 flex items-center text-white transition-all duration-600 px-5"
+  class="animate-fade-in-up fixed left-0 top-0 w-full z-50 flex items-center text-white transition-all duration-300 ease-in-out px-5 overflow-hidden"
 >
-  <!-- Contenedor interno (para padding horizontal) -->
-  <div class="flex w-full items-center justify-between px-10 py-3">
-
-    <!-- Izquierda -->
-    <div class="flex items-center justify-start w-[150px] hover:scale-102 transition-transform duration-600">
+  <div class="flex w-full items-center justify-between px-10 py-5 relative z-10 transition-all duration-300 ease-in-out">
+    <div class="flex items-center justify-start w-[150px] hover:scale-105 transition-transform duration-500">
       <img src="/Logo.svg" alt="Kaede Project Logo" class="max-h-6" />
     </div>
 
-    <!-- Centro (crece) -->
-    <div class="flex-1 flex justify-center text-[14px] tracking-tight">
-      <nav class="flex justify-center space-x-8">
-        <a href="#" class="hover:text-gray-400 transition duration-500 ease-in-out">HOME</a>
-        <a href="#" class="hover:text-gray-400 transition duration-500 ease-in-out">PROJECTS</a>
-        <a href="#" class="hover:text-gray-400 transition duration-500 ease-in-out">ABOUT</a>
-        <a href="#" class="hover:text-gray-400 transition duration-500 ease-in-out">SERVICES</a>
-      </nav>
-    </div>
+    <nav class="flex-1 flex justify-center text-[14px] tracking-tight space-x-8">
+      <a href="#" class="hover:text-gray-400 transition duration-300 ease-in-out">HOME</a>
+      <a href="#" class="hover:text-gray-400 transition duration-300 ease-in-out">PROJECTS</a>
+      <a href="#" class="hover:text-gray-400 transition duration-300 ease-in-out">ABOUT</a>
+      <a href="#" class="hover:text-gray-400 transition duration-300 ease-in-out">SERVICES</a>
+    </nav>
 
-    <!-- Derecha (mismo ancho que izquierda) -->
     <div class="flex items-center justify-end w-[150px]">
       <button
-        class="cta transition duration-700 px-5 py-[5px] rounded-lg text-[14px] mix-blend-screen tracking-tight "
+        class="cta transition duration-500 px-5 py-[5px] rounded-lg text-[14px] mix-blend-screen tracking-tight"
       >
         Contact
       </button>
     </div>
-
   </div>
 </header>
 
 <style>
   .cta {
-    background: rgba(77, 77, 77, 0.60);
+    background: rgba(77, 77, 77, 0.6);
     color: white;
     border: none;
   }
-
   .cta:hover {
-    background: rgba(255,255,255,0.95);
+    background: rgba(255, 255, 255, 0.95);
     color: black;
+  }
+
+  /* Header con barrido */
+  #mainHeader {
+    height: 110px;
+    transition: height 0.3s ease;
+  }
+  #mainHeader.scrolled {
+    height: 65px;
+  }
+  #mainHeader::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 1);
+    transform: translateY(-100%);
+    transition: transform 0.5s ease;
+    z-index: 0;
+    pointer-events: none;
+  }
+  #mainHeader.scrolled::before {
+    transform: translateY(0);
   }
 </style>
 
 <script>
   const header = document.getElementById("mainHeader");
-
   window.addEventListener("scroll", () => {
-    if (window.scrollY > 10) {
-      header.classList.remove("top-7");
-      header.classList.add("top-0");
-    } else {
-      header.classList.add("top-7");
-      header.classList.remove("top-0");
-    }
+    header.classList.toggle("scrolled", window.scrollY > 20);
   });
-
-  window.addEventListener("scroll", () => {
-    if (window.scrollY > 200) {
-      header.classList.add("backdrop-blur-md", "bg-black/80");
-    } else {
-      header.classList.remove("backdrop-blur-md", "bg-black/80");
-    }
-  });
-
-
 </script>
